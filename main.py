@@ -1,3 +1,4 @@
+import decimal
 import ReadWriteFunctions as rw
 
 FILENAME = "money.txt"
@@ -10,7 +11,11 @@ def showDealerHand(someArray):
 
 def main():
     print(f"BLACKJACK!\nBlackjack payout is 3:2")
-    money = rw.readMoney()
+    money = decimal.Decimal(rw.readMoney())
+    print(money)
+    bet = decimal.Decimal(input())
+    money -= bet
+    rw.writeMoney(money)
     print(money)
 
 

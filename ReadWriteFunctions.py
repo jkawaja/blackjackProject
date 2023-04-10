@@ -10,4 +10,4 @@ def readMoney():
 
 def writeMoney(money):
     with open(FILENAME, "w") as file:
-        file.write(f"{money}\n")
+        file.write(f"{money}")
