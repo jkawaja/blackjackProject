@@ -1,16 +1,17 @@
-def readMoney(FILENAME):
-    pass
+import ReadWriteFunctions as rw
 
-def writeMoney(FILENAME):
-    pass
+FILENAME = "money.txt"
 
-def showDealerHand(some_array):
+
+def showDealerHand(someArray):
     pass
 
 
 
 def main():
     print(f"BLACKJACK!\nBlackjack payout is 3:2")
+    money = rw.readMoney(FILENAME)
+    print(money)
 
 
 
