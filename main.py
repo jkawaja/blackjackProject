@@ -10,7 +10,7 @@ def showDealerHand(someArray):
 
 def main():
     print(f"BLACKJACK!\nBlackjack payout is 3:2")
-    money = rw.readMoney(FILENAME)
+    money = rw.readMoney()
     print(money)
 
 
