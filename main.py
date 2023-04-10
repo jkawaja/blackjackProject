@@ -1,5 +1,5 @@
 import decimal
-import ReadWriteFunctions as rw
+import db
 
 FILENAME = "money.txt"
 
@@ -7,15 +7,25 @@ FILENAME = "money.txt"
 def showDealerHand(someArray):
     pass
 
+def betCalculation():
+    bet = decimal.Decimal(input("Bet Amount: "))
+    while True:
+        try:
+            if bet >= 5 and bet <= 1000:
+                return bet
+        except ValueError:
+            print("Invalid input. Please try again.")
+
 
 
 def main():
     print(f"BLACKJACK!\nBlackjack payout is 3:2")
-    money = decimal.Decimal(rw.readMoney())
+    money = decimal.Decimal(db.readMoney())
     print(money)
-    bet = decimal.Decimal(input())
+    #
+    bet = betCalculation()
     money -= bet
-    rw.writeMoney(money)
+    db.writeMoney(money)
     print(money)
 
 
