@@ -1,4 +1,5 @@
 import db
+import random
 
 FILENAME = "money.txt"
 
@@ -16,6 +17,10 @@ def generateDeck():
     for suit in SUITS:
         for card in CARDS:
             deck.append((card, suit))
+    return deck
+
+def shuffleDeck(deck):
+    random.shuffle(deck)
     return deck
 
 
@@ -64,6 +69,9 @@ def main():
     deck = generateDeck()
     print(deck)
     print(deck.count())
+
+    deck = shuffleDeck(deck)
+    print("shuffled deck", deck)
 
 
 if __name__ == '__main__':
