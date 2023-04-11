@@ -68,7 +68,7 @@ def main():
     #generate deck test
     deck = generateDeck()
     print(deck)
-    print(deck.count())
+
 
     deck = shuffleDeck(deck)
     print("shuffled deck", deck)
