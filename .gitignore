@@ -2,3 +2,6 @@
 
 #ignore .idea folder
 .idea
+
+#ignore money.txt
+money.txt
