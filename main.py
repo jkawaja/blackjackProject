@@ -37,19 +37,12 @@ def shuffleDeck(deck):
 def getCardFaceValue(CARDS):
     pass
 
-HAND = [('J', '♣'), ('Q', '♠')]
 
-def getTotalValue(HAND):
+
+def getTotalValue(hand):
     total = 0
-    for card in HAND:
-        if card[0] == "J":
-            total += 10
-        elif card[0] == "Q":
-            total += 10
-        elif card[0] == "K":
-            total += 10
-        elif card[0] == "A":
-            total += 11
+    for card in hand:
+        total += card[2]
     return total
 
 
@@ -93,15 +86,25 @@ def main():
     # print(money)
 
     #generate deck test
-    deck = generateDeck()
-    print(deck)
+    deck = generateDeck(CARDS)
+    print("plain deck", deck)
 
 
     deck = shuffleDeck(deck)
     print("shuffled deck", deck)
 
-    handValue = getTotalValue(HAND)
-    print(handValue)
+    deck_card_one = deck[0]
+
+    playerHand = []
+    playerHand.append(deck[0])
+    print("playerHand", playerHand)
+    handValue = getTotalValue(playerHand)
+    print("handValue", handValue)
+    deck.pop(0)
+    print("deck first card popped", deck)
+
+
+
 
 
 if __name__ == '__main__':
