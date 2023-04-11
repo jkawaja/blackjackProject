@@ -3,9 +3,20 @@ import db
 FILENAME = "money.txt"
 
 # The type of suit
-suits = ["♠", "♥", "♦", "♣"]
+SUITS = ["♠", "♥", "♦", "♣"]
 # The face value of the card
-cards = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+CARDS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+
+dealerHand = []
+
+playerHand = []
+
+def generateDeck():
+    deck = []
+    for suit in SUITS:
+        for card in CARDS:
+            deck.append((card, suit))
+    return deck
 
 
 def functionThatGetsFaceValue():
@@ -33,7 +44,7 @@ def betCalculation():
 
 def main():
     print(f"BLACKJACK!\nBlackjack payout is 3:2")
-    money = db.readMoney()
+    money = float(db.readMoney())
     print(money)
     #test subtract money
     print("Test Subtract Money")
@@ -49,6 +60,10 @@ def main():
     db.writeMoney(money)
     print(money)
 
+    #generate deck test
+    deck = generateDeck()
+    print(deck)
+    print(deck.count())
 
 
 if __name__ == '__main__':
