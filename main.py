@@ -1,5 +1,6 @@
 import db
 import random
+import decimal
 
 FILENAME = "money.txt"
 
@@ -44,7 +45,6 @@ def getTotalValue(hand):
 
 
 def showDealerHand(dealerHand):
-    print("DEALER'S SHOW CARD:")
     for i in range(len(dealerHand) - 1):
         print(f"{dealerHand[0][1]} of {dealerHand[0][0]}s")
 
@@ -57,7 +57,7 @@ def showHand(hand):
 def betCalculation():
     while True:
         try:
-            bet = float(input("Bet Amount: "))
+            bet = decimal.Decimal(input("Bet Amount: "))
             if bet >= 5 and bet <= 1000:
                 return bet
             else:
@@ -66,6 +66,12 @@ def betCalculation():
             print("Invalid input. Please try again.")
 
 def dealCard(deck, hand):
+    if deck[0][1] == "Ace":
+        total = getTotalValue(hand) + 11
+        if total > 21 and deck[0][1] == "Ace":
+            deck[0][2] = 1
+        elif deck
+        aceChoice = input("You have drawn an ace")
     hand.append(deck[0])
     deck.pop(0)
     return hand
@@ -73,59 +79,59 @@ def dealCard(deck, hand):
 
 
 def main():
-    print(f"BLACKJACK!\nBlackjack payout is 3:2")
-    money = float(db.readMoney())
-    keepGoing = "y"
-    # while keepGoing.lower() == "":
-    dealerHand = []
-    playerHand = []
+        print(f"BLACKJACK!\nBlackjack payout is 3:2")
+        money = decimal.Decimal(db.readMoney())
+        playGame = "y"
 
-    print(money)
+        while playGame.lower() == "y":
+            #Dealer / Player Hands
+            dealerHand = []
+            playerHand = []
 
-    #generate deck
-    deck = generateDeck(CARDS)
-    print("plain deck", deck)
-    #shuffle deck
-    deck = shuffleDeck(deck)
-    print("shuffled deck", deck)
+            print(f"Money: {money}: ")
+            #Place your bet
+            bet = betCalculation()
 
-    #set up dealerHand
-    dealerHand = dealCard(deck, dealerHand)
-    dealerHand = dealCard(deck, dealerHand)
-    showDealerHand(dealerHand)
-    print()
-    #set up playerHand
-    playerHand = dealCard(deck, playerHand)
-    playerHand = dealCard(deck, playerHand)
-    print(f"YOUR CARDS:")
-    showHand(playerHand)
-    print()
+            #generate deck
+            deck = generateDeck(CARDS)
+            #shuffle deck
+            deck = shuffleDeck(deck)
 
-    playerChoice = input("Hit or stand? (hit/stand): ")
-    if playerChoice.lower() == 'hit':
-        playerHand = dealCard(deck, playerHand)
-        print(f"YOUR CARDS:")
-        showHand(playerHand)
-    elif playerChoice.lower() == "stay":
-        #PLAYERTURN = FALSE/OVER
-        #MOVE TO DEALER'S TURN
+            #set up dealerHand
+            dealerHand = dealCard(deck, dealerHand)
+            dealerHand = dealCard(deck, dealerHand)
+            print("DEALER'S SHOW CARD:")
+            showDealerHand(dealerHand)
+            print()
+            #set up playerHand
+            playerHand = dealCard(deck, playerHand)
+            playerHand = dealCard(deck, playerHand)
+            print(f"YOUR CARDS:")
+            showHand(playerHand)
+            print()
+            while True:
+                playerChoice = input("Hit or stand? (hit/stand): ")
+                if playerChoice.lower() == 'hit':
+                    playerHand = dealCard(deck, playerHand)
+                    print(f"YOUR CARDS:")
+                    showHand(playerHand)
+                elif playerChoice.lower() == "stay":
+                    #PLAYERTURN = FALSE/OVER
+                    #MOVE TO DEALER'S TURN
+
+            # Dealer's Turn
+            while True:
+
+                print(f"DEALER'S CARDS:")
+                showHand(dealerHand)
+                #IF STATEMENT: if value of dealer's hand > value of player's hand
+                    #GAME OVER, DEALER WINS
+                    #SORRY. YOU LOSE.
+                    #SUBTRACT MONEY FROM PLAYER POT, SHOW PLAYER POT
+                    # CHECK IF PLAYER POT < $5. IF SO, PLAYER HAS OPTION TO BUY MORE CHIPS
 
 
-
-
-
-
-
-    #Dealer's Turn
-    print(f"DEALER'S CARDS:")
-    showHand(dealerHand)
-    #IF STATEMENT: if value of dealer's hand > value of player's hand
-        #GAME OVER, DEALER WINS
-        #SORRY. YOU LOSE.
-        #SUBTRACT MONEY FROM PLAYER POT, SHOW PLAYER POT
-        # CHECK IF PLAYER POT < $5. IF SO, PLAYER HAS OPTION TO BUY MORE CHIPS
-
-
+    playGame = input("Play again? (y/n): ")
 
 
 
