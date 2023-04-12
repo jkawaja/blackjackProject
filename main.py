@@ -47,12 +47,14 @@ def getTotalValue(hand):
 
 
 
-def showDealerHand(someArray):
-    pass
+def showDealerHand(dealerHand):
+    for i in range(len(dealerHand) - 1):
+        print(f"{dealerHand[0][1]} of {dealerHand[0][0]}s")
 
 
-def showPlayerHand(someArray):
-    pass
+def showHand(hand):
+    for card in hand:
+        print(f"{card[1]} of {card[0]}s")
 
 
 def betCalculation():
@@ -103,7 +105,16 @@ def main():
     deck.pop(0)
     print("deck first card popped", deck)
 
+    testHand = [['Diamond', '5', 5], ['Club', 'Queen', 10]]
 
+
+    showDealerHand(testHand)
+
+    print()
+    print()
+    print()
+
+    showHand(testHand)
 
 
 
