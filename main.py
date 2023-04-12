@@ -73,13 +73,13 @@ def dealPlayerCard(deck, hand):
             deck[0][2] = 1
         elif checkTotal <= 21 and deck[0][1] == "Ace":
             try:
-                aceChoice = input("You have drawn an Ace, would you like it to be 1 or 11? (enter 1 or 11): ")
-                if aceChoice == "1":
+                aceChoice = int(input("You have drawn an Ace, would you like it to be 1 or 11? (enter 1 or 11): "))
+                if aceChoice == 1:
                     deck[0][2] = 1
-                else:
+                elif aceChoice == 11:
                     deck[0][2] = 11
             except ValueError:
-                ("Invalid input. Please try again.")
+                print("Invalid input. Please try again.")
 
 
     hand.append(deck[0])
@@ -128,13 +128,16 @@ def main():
 
         if money < 5:
             print()
-            addMoney = input("Would you like to buy more chips? (100) (y/n): ")
-            if addMoney.lower() == "y":
-                money += Decimal(100)
-            else:
-                print()
-                print("You do not have enough money to bet. Game over.")
-                return playGame == "n"
+            try:
+                addMoney = input("Would you like to buy more chips? (100) (y/n): ")
+                if addMoney.lower() == "y":
+                    money += Decimal(100)
+                else:
+                    print()
+                    print("You do not have enough money to bet. Game over.")
+                    return playGame == "n"
+            except ValueError:
+                print("Invalid input. Please try again.")
 
         while playGame.lower() == "y":
             #while loop trues
