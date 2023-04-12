@@ -165,26 +165,45 @@ def main():
                         print(f"Money: {money}")
                         break
 
+                elif playerChoice.lower() == "stand":
 
-
-                elif playerChoice.lower() == "stay":
+                    print()
                     break
                     #PLAYERTURN = FALSE/OVER
                     #MOVE TO DEALER'S TURN
 
             # Dealer's Turn
             while True:
-
                 print(f"DEALER'S CARDS:")
                 showHand(dealerHand)
-                break
-                #IF STATEMENT: if value of dealer's hand > value of player's hand
+                dealerPoints = getTotalValue(dealerHand)
+                if getTotalValue(dealerHand) > getTotalValue(playerHand):
+                    print("DEALER'S CARDS:")
+                    showDealerHand(dealerHand)
+                    print()
+                    print(f"YOUR POINTS: {getTotalValue(playerHand)}")
+                    print(f"YOUR POINTS: {getTotalValue(dealerHand)}")
+                    print()
+                    print(f"Sorry. You lose.\nBye!")
+                    break
+                elif getTotalValue(dealerHand) <= 17:
+                    print("DEALER DRAWS A CARD")
+                    dealerHand = dealDealerCard(deck, dealerHand)
+                    if getTotalValue(dealerHand) > 21:
+                        print("Player Busted! You win!")
+                        money += bet
+                        db.writeMoney(money)
+                        print(f"Money: {money}")
+                        break
+
+
+                    # STATEMENT: if value of dealer's hand > value of player's hand
                     #GAME OVER, DEALER WINS
                     #SORRY. YOU LOSE.
                     #SUBTRACT MONEY FROM PLAYER POT, SHOW PLAYER POT
                     # CHECK IF PLAYER POT < $5. IF SO, PLAYER HAS OPTION TO BUY MORE CHIPS
 
-            print()
+
             playGame = input("Play again? (y/n): ")
             print()
         print(f"Come back soon!\nBye!")
