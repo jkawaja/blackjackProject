@@ -96,6 +96,18 @@ def dealDealerCard(deck, hand):
     hand.append(deck[0])
     deck.pop(0)
     return hand
+def checkMoney(money):
+    addMoney = ""
+    playGame = ""
+    if money < 5:
+        while addMoney.lower() != "y":
+            addMoney = input("Would you like to buy more chips? (100) (y/n): ")
+            if addMoney.lower() == "y":
+                money += Decimal(100)
+            elif addMoney.lower() == "n":
+                print()
+                print("You do not have enough money to bet. Game over.")
+                return playGame.lower() == "n"
 
 
 
@@ -126,21 +138,10 @@ def main():
         money = Decimal(db.readMoney())
         playGame = "y"
 
-        if money < 5:
-            print()
-            try:
-                addMoney = input("Would you like to buy more chips? (100) (y/n): ")
-                if addMoney.lower() == "y":
-                    money += Decimal(100)
-                else:
-                    print()
-                    print("You do not have enough money to bet. Game over.")
-                    return playGame == "n"
-            except ValueError:
-                print("Invalid input. Please try again.")
+        #check if money < 5
+        checkMoney(money)
 
         while playGame.lower() == "y":
-            #while loop trues
             playerTurn = True
             dealerTurn = True
             #Dealer / Player Hands
@@ -248,54 +249,22 @@ def main():
                     print(f"Money: {money}")
                     print()
                     dealerTurn = False
-            playGame = input("Play again? (y/n): ")
-        print(f"Come back soon!\nBye!")
 
+            keepPlaying = ""
+            while keepPlaying not in ("y", "n"):
+                answer = input("Play again? (y/n): ")
+                if answer == "y":
+                    continue
+                elif answer == "n":
+                    break
+                else:
+                    print("Please enter (y/n)")
+
+        print(f"Come back soon!\nBye!")
 
 if __name__ == '__main__':
     main()
 
-    #JUNK CODE DOWN HERE FOR TESTING
-    #
-    # deck_card_one = deck[0]
-    #
-    # playerHand = []
 
-    # print("playerHand", playerHand)
-    # handValue = getTotalValue(playerHand)
-    # print("handValue", handValue)
-
-    # print("deck first card popped", deck)
-    #
-    # testHand = [['Diamond', '5', 5], ['Club', 'Queen', 10]]
-    #
-    #
-    # showDealerHand(testHand)
-    #
-    # print()
-    # print()
-    # print()
-    #
-    # showHand(testHand)
-
-
-       #Show dealer's hand
-
-
-    # #test subtract money
-    # print("Test Subtract Money")
-    # bet = betCalculation()
-    # money = money - bet
-    # db.writeMoney(money)
-    # print(money)
-    #
-    # #add money test
-    # print("Test Add Money")
-    # bet = betCalculation()
-    # money = money + bet
-    # db.writeMoney(money)
-    # print(money)
-
-    #generate deck test
 
 
