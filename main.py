@@ -156,17 +156,15 @@ def main():
                     playerPoints = getTotalValue(playerHand)
                     dealerPoints = getTotalValue(dealerHand)
 
-                    if playerPoints > 21:
-                        print(f"YOUR POINTS: {playerPoints}")
-                        print(f"DEALER'S POINTS: {dealerPoints}")
-                        print("Player Busted! Sorry, you lose.")
-                        money -= bet
-                        db.writeMoney(money)
-                        print(f"Money: {money}")
-                        break
-
+                if playerPoints > 21:
+                    print(f"YOUR POINTS: {playerPoints}")
+                    print(f"DEALER'S POINTS: {dealerPoints}")
+                    print("You busted. Sorry, you lose.")
+                    money -= bet
+                    db.writeMoney(money)
+                    print(f"Money: {money}")
+                    break
                 elif playerChoice.lower() == "stand":
-
                     print()
                     break
                     #PLAYERTURN = FALSE/OVER
@@ -177,24 +175,50 @@ def main():
                 print(f"DEALER'S CARDS:")
                 showHand(dealerHand)
                 dealerPoints = getTotalValue(dealerHand)
-                if getTotalValue(dealerHand) > getTotalValue(playerHand):
-                    print("DEALER'S CARDS:")
-                    showDealerHand(dealerHand)
+                if getTotalValue(dealerHand) > 21:
                     print()
                     print(f"YOUR POINTS: {getTotalValue(playerHand)}")
-                    print(f"YOUR POINTS: {getTotalValue(dealerHand)}")
+                    print(f"DEALER'S POINTS: {getTotalValue(dealerHand)}")
                     print()
-                    print(f"Sorry. You lose.\nBye!")
+                    print("Dealer stayed. You win.")
+                    money += bet
+                    db.writeMoney(money)
+                    print(f"Money: {money}")
                     break
-                elif getTotalValue(dealerHand) <= 17:
+                elif getTotalValue(dealerHand) > getTotalValue(playerHand):
+                    # print("DEALER'S CARDS:")
+                    # showHand(dealerHand)
+                    print()
+                    print(f"YOUR POINTS: {getTotalValue(playerHand)}")
+                    print(f"DEALER'S POINTS: {getTotalValue(dealerHand)}")
+                    print()
+                    print(f"Sorry. You lose.")
+                    money -= bet
+                    db.writeMoney(money)
+                    print(f"Money: {money}")
+                    break
+                elif getTotalValue(dealerHand) < 17:
                     print("DEALER DRAWS A CARD")
                     dealerHand = dealDealerCard(deck, dealerHand)
-                    if getTotalValue(dealerHand) > 21:
-                        print("Player Busted! You win!")
-                        money += bet
-                        db.writeMoney(money)
-                        print(f"Money: {money}")
-                        break
+                elif getTotalValue(dealerHand) >= 17 and getTotalValue(dealerHand) < getTotalValue(playerHand):
+                    print()
+                    print(f"YOUR POINTS: {getTotalValue(playerHand)}")
+                    print(f"DEALER'S POINTS: {getTotalValue(dealerHand)}")
+                    print()
+                    print("Dealer stays. You win!")
+                    money += bet
+                    db.writeMoney(money)
+                    print(f"Money: {money}")
+                    break
+                elif getTotalValue(dealerHand) == getTotalValue(playerHand):
+                    print()
+                    print(f"YOUR POINTS: {getTotalValue(playerHand)}")
+                    print(f"DEALER'S POINTS: {getTotalValue(dealerHand)}")
+                    print()
+                    print("Dealer stays. It's a tie. Player gets money back.")
+                    db.writeMoney(money)
+                    print(f"Money: {money}")
+                    break
 
 
                     # STATEMENT: if value of dealer's hand > value of player's hand
