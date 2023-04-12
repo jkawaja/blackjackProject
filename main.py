@@ -106,31 +106,28 @@ def main():
         playerHand = dealCard(deck, playerHand)
         print(f"YOUR CARDS:")
         showHand(playerHand)
-
-    #Check deck
-    print("updated deck", deck)
-
-
+    elif playerChoice.lower() == "stay":
+        #PLAYERTURN = FALSE/OVER
+        #MOVE TO DEALER'S TURN
 
 
-        #Show dealer's hand
 
 
-    # #test subtract money
-    # print("Test Subtract Money")
-    # bet = betCalculation()
-    # money = money - bet
-    # db.writeMoney(money)
-    # print(money)
-    #
-    # #add money test
-    # print("Test Add Money")
-    # bet = betCalculation()
-    # money = money + bet
-    # db.writeMoney(money)
-    # print(money)
 
-    #generate deck test
+
+
+    #Dealer's Turn
+    print(f"DEALER'S CARDS:")
+    showHand(dealerHand)
+    #IF STATEMENT: if value of dealer's hand > value of player's hand
+        #GAME OVER, DEALER WINS
+        #SORRY. YOU LOSE.
+        #SUBTRACT MONEY FROM PLAYER POT, SHOW PLAYER POT
+        # CHECK IF PLAYER POT < $5. IF SO, PLAYER HAS OPTION TO BUY MORE CHIPS
+
+
+
+
 
 
 
@@ -142,7 +139,7 @@ def main():
 if __name__ == '__main__':
     main()
 
-    #
+    #JUNK CODE DOWN HERE FOR TESTING
     #
     # deck_card_one = deck[0]
     #
@@ -164,4 +161,25 @@ if __name__ == '__main__':
     # print()
     #
     # showHand(testHand)
+
+
+       #Show dealer's hand
+
+
+    # #test subtract money
+    # print("Test Subtract Money")
+    # bet = betCalculation()
+    # money = money - bet
+    # db.writeMoney(money)
+    # print(money)
+    #
+    # #add money test
+    # print("Test Add Money")
+    # bet = betCalculation()
+    # money = money + bet
+    # db.writeMoney(money)
+    # print(money)
+
+    #generate deck test
+
 
