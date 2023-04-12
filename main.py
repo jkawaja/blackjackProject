@@ -48,6 +48,7 @@ def getTotalValue(hand):
 
 
 def showDealerHand(dealerHand):
+    print("DEALER'S SHOW CARD:")
     for i in range(len(dealerHand) - 1):
         print(f"{dealerHand[0][1]} of {dealerHand[0][0]}s")
 
@@ -68,11 +69,28 @@ def betCalculation():
         except ValueError:
             print("Invalid input. Please try again.")
 
+def
+
 
 def main():
     print(f"BLACKJACK!\nBlackjack payout is 3:2")
     money = float(db.readMoney())
-    print(money)
+    keepGoing = "y"
+    while keepGoing.lower() == "y":
+        print(money)
+
+        #generate deck
+        deck = generateDeck(CARDS)
+        #shuffle deck
+        deck = shuffleDeck(deck)
+        print("shuffled deck", deck)
+
+        #set up hands
+
+
+        #Show dealer's hand
+
+
     # #test subtract money
     # print("Test Subtract Money")
     # bet = betCalculation()
@@ -88,37 +106,37 @@ def main():
     # print(money)
 
     #generate deck test
-    deck = generateDeck(CARDS)
-    print("plain deck", deck)
 
 
-    deck = shuffleDeck(deck)
-    print("shuffled deck", deck)
-
-    deck_card_one = deck[0]
-
-    playerHand = []
-    playerHand.append(deck[0])
-    print("playerHand", playerHand)
-    handValue = getTotalValue(playerHand)
-    print("handValue", handValue)
-    deck.pop(0)
-    print("deck first card popped", deck)
-
-    testHand = [['Diamond', '5', 5], ['Club', 'Queen', 10]]
 
 
-    showDealerHand(testHand)
 
-    print()
-    print()
-    print()
-
-    showHand(testHand)
 
 
 
 if __name__ == '__main__':
     main()
 
+    #
+    #
+    # deck_card_one = deck[0]
+    #
+    # playerHand = []
+    # playerHand.append(deck[0])
+    # print("playerHand", playerHand)
+    # handValue = getTotalValue(playerHand)
+    # print("handValue", handValue)
+    # deck.pop(0)
+    # print("deck first card popped", deck)
+    #
+    # testHand = [['Diamond', '5', 5], ['Club', 'Queen', 10]]
+    #
+    #
+    # showDealerHand(testHand)
+    #
+    # print()
+    # print()
+    # print()
+    #
+    # showHand(testHand)
 
