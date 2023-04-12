@@ -54,23 +54,24 @@ def showHand(hand):
         print(f"{card[1]} of {card[0]}s")
 
 
-def betCalculation():
+def betCalculation(money):
     while True:
         try:
             bet = decimal.Decimal(input("Bet Amount: "))
-            if bet >= 5 and bet <= 1000:
+            if bet >= 5 and bet <= 1000 and bet <= money:
                 return bet
             else:
-                print("Bet must be between $5 and $1000")
+                print("Bet must be between $5 and $1000, and less than pot. Try again.")
         except ValueError:
             print("Invalid input. Please try again.")
 
 def dealPlayerCard(deck, hand):
+    print(f"{deck[0][1]} of {deck[0][0]}s")
     if deck[0][1] == "Ace":
         checkTotal = getTotalValue(hand) + deck[0][2]
         if checkTotal > 21 and deck[0][1] == "Ace":
             deck[0][2] = 1
-        elif checkTotal < 21 and deck[0][1] == "Ace":
+        elif checkTotal <= 21 and deck[0][1] == "Ace":
             aceChoice = input("You have drawn an Ace, would you like it to be 1 or 11? (enter 1 or 11): ")
             if aceChoice == "1":
                 deck[0][2] = 1
@@ -92,20 +93,23 @@ def dealDealerCard(deck, hand):
     return hand
 
 
+
+
 # def main():
-#     deck = [["Heart", "Ace", 11]]
-#     print(deck[0][2], deck[0][1])
-#     playerHand = [["Spade", "9", 10], ["Diamond", "2", 10], ["Spade", "Ace", 1]]
-#     showHand(playerHand)
-#     total = getTotalValue(playerHand)
-#     print("player hand", total)
+#     deck = [["Spade", "10", 10], ["Heart", "Ace", 11]]
+#     # print(deck[0][2], deck[0][1])
+#     playerHand = [] # , ["Diamond", "Ace", 11]
+#     # showHand(playerHand)
+#     # total = getTotalValue(playerHand)
+#     # print("player hand", total)
 #     # Draw an Ace
-#     playerHand = dealCard(deck, playerHand)
-#     showHand(playerHand)
-#     total = getTotalValue(playerHand)
-#     print("player hand", total)
+#     playerHand = dealPlayerCard(deck, playerHand)
+#     playerHand = dealPlayerCard(deck, playerHand)
+#     # showHand(playerHand)
+#     # total = getTotalValue(playerHand)
+#     # print("player hand", total)
 #
-#     print(deck)
+#     # print(deck)
 #
 #
 # if __name__ == '__main__':
@@ -118,6 +122,9 @@ def main():
         playGame = "y"
 
         while playGame.lower() == "y":
+            #while loop trues
+            playerTurn = True
+            dealerTurn = True
             #Dealer / Player Hands
             dealerHand = []
             playerHand = []
@@ -125,10 +132,11 @@ def main():
             #Dealer / Player Points
             dealerPoints = 0
             playerPoints = 0
-
+            print()
             print(f"Money: {money}: ")
             #Place your bet
-            bet = betCalculation()
+            bet = betCalculation(money)
+            print()
 
             #generate deck
             deck = generateDeck(CARDS)
@@ -142,53 +150,43 @@ def main():
             showDealerHand(dealerHand)
             print()
             #set up playerHand
-            playerHand = dealPlayerCard(deck, playerHand)
-            playerHand = dealPlayerCard(deck, playerHand)
             print(f"YOUR CARDS:")
-            showHand(playerHand)
+            playerHand = dealPlayerCard(deck, playerHand)
+            playerHand = dealPlayerCard(deck, playerHand)
             print()
-            while True:
+            while playerTurn:
                 playerChoice = input("Hit or stand? (hit/stand): ")
+                print()
                 if playerChoice.lower() == 'hit':
-                    playerHand = dealPlayerCard(deck, playerHand)
                     print(f"YOUR CARDS:")
                     showHand(playerHand)
+                    playerHand = dealPlayerCard(deck, playerHand)
                     playerPoints = getTotalValue(playerHand)
                     dealerPoints = getTotalValue(dealerHand)
+                    print()
 
                 if playerPoints > 21:
+                    print()
                     print(f"YOUR POINTS: {playerPoints}")
                     print(f"DEALER'S POINTS: {dealerPoints}")
                     print("You busted. Sorry, you lose.")
                     money -= bet
                     db.writeMoney(money)
                     print(f"Money: {money}")
-                    break
-                elif playerChoice.lower() == "stand":
                     print()
-                    break
-                    #PLAYERTURN = FALSE/OVER
-                    #MOVE TO DEALER'S TURN
+                    dealerTurn = False
+                    playerTurn = False
+
+                elif playerChoice.lower() == "stand":
+                    playerTurn = False
 
             # Dealer's Turn
-            while True:
+            while dealerTurn:
                 print(f"DEALER'S CARDS:")
                 showHand(dealerHand)
+                print()
                 dealerPoints = getTotalValue(dealerHand)
-                if getTotalValue(dealerHand) > 21:
-                    print()
-                    print(f"YOUR POINTS: {getTotalValue(playerHand)}")
-                    print(f"DEALER'S POINTS: {getTotalValue(dealerHand)}")
-                    print()
-                    print("Dealer stayed. You win.")
-                    money += bet
-                    db.writeMoney(money)
-                    print(f"Money: {money}")
-                    break
-                elif getTotalValue(dealerHand) > getTotalValue(playerHand):
-                    # print("DEALER'S CARDS:")
-                    # showHand(dealerHand)
-                    print()
+                if getTotalValue(dealerHand) > getTotalValue(playerHand):
                     print(f"YOUR POINTS: {getTotalValue(playerHand)}")
                     print(f"DEALER'S POINTS: {getTotalValue(dealerHand)}")
                     print()
@@ -196,10 +194,7 @@ def main():
                     money -= bet
                     db.writeMoney(money)
                     print(f"Money: {money}")
-                    break
-                elif getTotalValue(dealerHand) < 17:
-                    print("DEALER DRAWS A CARD")
-                    dealerHand = dealDealerCard(deck, dealerHand)
+                    dealerTurn = False
                 elif getTotalValue(dealerHand) >= 17 and getTotalValue(dealerHand) < getTotalValue(playerHand):
                     print()
                     print(f"YOUR POINTS: {getTotalValue(playerHand)}")
@@ -209,7 +204,19 @@ def main():
                     money += bet
                     db.writeMoney(money)
                     print(f"Money: {money}")
-                    break
+                    dealerTurn = False
+                elif getTotalValue(dealerHand) < 17:
+                    dealerHand = dealDealerCard(deck, dealerHand)
+                    if getTotalValue(dealerHand) > 21:
+                        print()
+                        print(f"YOUR POINTS: {getTotalValue(playerHand)}")
+                        print(f"DEALER'S POINTS: {getTotalValue(dealerHand)}")
+                        print()
+                        print("Dealer busted. You win.")
+                        money += bet
+                        db.writeMoney(money)
+                        print(f"Money: {money}")
+                        dealerTurn = False
                 elif getTotalValue(dealerHand) == getTotalValue(playerHand):
                     print()
                     print(f"YOUR POINTS: {getTotalValue(playerHand)}")
@@ -218,14 +225,7 @@ def main():
                     print("Dealer stays. It's a tie. Player gets money back.")
                     db.writeMoney(money)
                     print(f"Money: {money}")
-                    break
-
-
-                    # STATEMENT: if value of dealer's hand > value of player's hand
-                    #GAME OVER, DEALER WINS
-                    #SORRY. YOU LOSE.
-                    #SUBTRACT MONEY FROM PLAYER POT, SHOW PLAYER POT
-                    # CHECK IF PLAYER POT < $5. IF SO, PLAYER HAS OPTION TO BUY MORE CHIPS
+                    dealerTurn = False
 
 
             playGame = input("Play again? (y/n): ")
