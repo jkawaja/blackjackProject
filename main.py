@@ -121,6 +121,16 @@ def main():
         money = decimal.Decimal(db.readMoney())
         playGame = "y"
 
+        if money < 5:
+            print()
+            addMoney = input("Would you like to buy more chips? (100) (y/n): ")
+            if addMoney.lower() == "y":
+                money += decimal.Decimal(100)
+            else:
+                print()
+                print("You do not have enough money to bet. Game over.")
+                return playGame == "n"
+
         while playGame.lower() == "y":
             #while loop trues
             playerTurn = True
