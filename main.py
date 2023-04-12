@@ -1,6 +1,6 @@
 import db
 import random
-import decimal
+from decimal import Decimal, DecimalException
 
 FILENAME = "money.txt"
 
@@ -57,12 +57,12 @@ def showHand(hand):
 def betCalculation(money):
     while True:
         try:
-            bet = decimal.Decimal(input("Bet Amount: "))
-            if bet >= 5 and bet <= 1000 and bet <= money:
-                return bet
-            else:
+            bet = Decimal(input("Bet Amount: "))
+            if bet < 5.0 and bet > 1000.00 and bet <= money:
                 print("Bet must be between $5 and $1000, and less than pot. Try again.")
-        except ValueError:
+            else:
+                return bet
+        except (ValueError, DecimalException):
             print("Invalid input. Please try again.")
 
 def dealPlayerCard(deck, hand):
@@ -72,11 +72,16 @@ def dealPlayerCard(deck, hand):
         if checkTotal > 21 and deck[0][1] == "Ace":
             deck[0][2] = 1
         elif checkTotal <= 21 and deck[0][1] == "Ace":
-            aceChoice = input("You have drawn an Ace, would you like it to be 1 or 11? (enter 1 or 11): ")
-            if aceChoice == "1":
-                deck[0][2] = 1
-            else:
-                deck[0][2] = 11
+            try:
+                aceChoice = input("You have drawn an Ace, would you like it to be 1 or 11? (enter 1 or 11): ")
+                if aceChoice == "1":
+                    deck[0][2] = 1
+                else:
+                    deck[0][2] = 11
+            except ValueError:
+                ("Invalid input. Please try again.")
+
+
     hand.append(deck[0])
     deck.pop(0)
     return hand
@@ -118,14 +123,14 @@ def dealDealerCard(deck, hand):
 # Code starts here.
 def main():
         print(f"BLACKJACK!\nBlackjack payout is 3:2")
-        money = decimal.Decimal(db.readMoney())
+        money = Decimal(db.readMoney())
         playGame = "y"
 
         if money < 5:
             print()
             addMoney = input("Would you like to buy more chips? (100) (y/n): ")
             if addMoney.lower() == "y":
-                money += decimal.Decimal(100)
+                money += Decimal(100)
             else:
                 print()
                 print("You do not have enough money to bet. Game over.")
@@ -180,6 +185,7 @@ def main():
                     print(f"YOUR POINTS: {playerPoints}")
                     print(f"DEALER'S POINTS: {dealerPoints}")
                     print("You busted. Sorry, you lose.")
+                    print()
                     money -= bet
                     db.writeMoney(money)
                     print(f"Money: {money}")
@@ -204,9 +210,9 @@ def main():
                     money -= bet
                     db.writeMoney(money)
                     print(f"Money: {money}")
+                    print()
                     dealerTurn = False
                 elif getTotalValue(dealerHand) >= 17 and getTotalValue(dealerHand) < getTotalValue(playerHand):
-                    print()
                     print(f"YOUR POINTS: {getTotalValue(playerHand)}")
                     print(f"DEALER'S POINTS: {getTotalValue(dealerHand)}")
                     print()
@@ -214,18 +220,20 @@ def main():
                     money += bet
                     db.writeMoney(money)
                     print(f"Money: {money}")
+                    print()
                     dealerTurn = False
                 elif getTotalValue(dealerHand) < 17:
                     dealerHand = dealDealerCard(deck, dealerHand)
                     if getTotalValue(dealerHand) > 21:
-                        print()
                         print(f"YOUR POINTS: {getTotalValue(playerHand)}")
                         print(f"DEALER'S POINTS: {getTotalValue(dealerHand)}")
                         print()
                         print("Dealer busted. You win.")
+                        print()
                         money += bet
                         db.writeMoney(money)
                         print(f"Money: {money}")
+                        print()
                         dealerTurn = False
                 elif getTotalValue(dealerHand) == getTotalValue(playerHand):
                     print()
@@ -235,11 +243,9 @@ def main():
                     print("Dealer stays. It's a tie. Player gets money back.")
                     db.writeMoney(money)
                     print(f"Money: {money}")
+                    print()
                     dealerTurn = False
-
-
             playGame = input("Play again? (y/n): ")
-            print()
         print(f"Come back soon!\nBye!")
 
 
