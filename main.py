@@ -109,7 +109,17 @@ def checkMoney(money):
                 print("You do not have enough money to bet. Game over.")
                 return playGame.lower() == "n"
 
-
+def keepPlaying():
+    keepPlaying = ""
+    while keepPlaying not in ("y", "n"):
+        answer = input("Play again? (y/n): ")
+        if answer == "y":
+            continue
+        elif answer == "n":
+            break
+        else:
+            print()
+            print("Please enter (y/n)")
 
 
 # def main():
@@ -134,7 +144,7 @@ def checkMoney(money):
 
 # Code starts here.
 def main():
-        print(f"BLACKJACK!\nBlackjack payout is 3:2")
+        print(f"BLACKJACK!\nBlackjack payout is 3:2\n")
         money = Decimal(db.readMoney())
         playGame = "y"
 
@@ -205,10 +215,9 @@ def main():
                 print(f"DEALER'S CARDS:")
                 showHand(dealerHand)
                 print()
-                dealerPoints = getTotalValue(dealerHand)
-                if getTotalValue(dealerHand) > getTotalValue(playerHand):
-                    print(f"YOUR POINTS: {getTotalValue(playerHand)}")
-                    print(f"DEALER'S POINTS: {getTotalValue(dealerHand)}")
+                if dealerPoints > playerPoints:
+                    print(f"YOUR POINTS: {playerPoints}")
+                    print(f"DEALER'S POINTS: {dealerPoints}")
                     print()
                     print(f"Sorry. You lose.")
                     money -= bet
@@ -216,9 +225,9 @@ def main():
                     print(f"Money: {money}")
                     print()
                     dealerTurn = False
-                elif getTotalValue(dealerHand) >= 17 and getTotalValue(dealerHand) < getTotalValue(playerHand):
-                    print(f"YOUR POINTS: {getTotalValue(playerHand)}")
-                    print(f"DEALER'S POINTS: {getTotalValue(dealerHand)}")
+                elif dealerPoints >= 17 and dealerPoints < playerPoints:
+                    print(f"YOUR POINTS: {dealerPoints}")
+                    print(f"DEALER'S POINTS: {dealerPoints}")
                     print()
                     print("Dealer stays. You win!")
                     money += bet
@@ -228,9 +237,10 @@ def main():
                     dealerTurn = False
                 elif getTotalValue(dealerHand) < 17:
                     dealerHand = dealDealerCard(deck, dealerHand)
-                    if getTotalValue(dealerHand) > 21:
-                        print(f"YOUR POINTS: {getTotalValue(playerHand)}")
-                        print(f"DEALER'S POINTS: {getTotalValue(dealerHand)}")
+                    dealerPoints = getTotalValue(dealerHand)
+                    if dealerPoints > 21:
+                        print(f"YOUR POINTS: {playerPoints}")
+                        print(f"DEALER'S POINTS: {dealerPoints}")
                         print()
                         print("Dealer busted. You win.")
                         print()
@@ -239,27 +249,17 @@ def main():
                         print(f"Money: {money}")
                         print()
                         dealerTurn = False
-                elif getTotalValue(dealerHand) == getTotalValue(playerHand):
+                elif dealerPoints == playerPoints:
                     print()
-                    print(f"YOUR POINTS: {getTotalValue(playerHand)}")
-                    print(f"DEALER'S POINTS: {getTotalValue(dealerHand)}")
+                    print(f"YOUR POINTS: {playerPoints}")
+                    print(f"DEALER'S POINTS: {dealerPoints}")
                     print()
                     print("Dealer stays. It's a tie. Player gets money back.")
                     db.writeMoney(money)
                     print(f"Money: {money}")
                     print()
                     dealerTurn = False
-
-            keepPlaying = ""
-            while keepPlaying not in ("y", "n"):
-                answer = input("Play again? (y/n): ")
-                if answer == "y":
-                    continue
-                elif answer == "n":
-                    break
-                else:
-                    print("Please enter (y/n)")
-
+            keepPlaying()
         print(f"Come back soon!\nBye!")
 
 if __name__ == '__main__':
