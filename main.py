@@ -36,15 +36,12 @@ def checkMoney(money):
 def main():
         print(f"BLACKJACK!\nBlackjack payout is 3:2")
         money = Decimal(db.readMoney())
-        print()
         checkMoney(money)
         playGame = "y"
         while playGame.lower() == "y":
-
             money = Decimal(db.readMoney())
             checkMoney(money)
             money = Decimal(db.readMoney())
-
             playerTurn = True
             dealerTurn = True
             checkBlackJack = True
@@ -91,99 +88,76 @@ def main():
                 if playerPoints == 21:
                     print(f"YOUR CARDS:")
                     df.showHand(playerHand)
-                    print()
-                    print(f"Blackjack! Blackjack payout is 3:2 of bet.")
+                    print(f"\nBlackjack! Blackjack payout is 3:2 of bet.")
                     money += Decimal(bet) * Decimal(1.5)
                     money = money.quantize(Decimal("1.00"), ROUND_HALF_UP)
                     db.writeMoney(money)
-                    print(f"Money: {money}")
+                    print(f"Money: {money}\n")
                     dealerTurn = False
                     playerTurn = False
-                    print()
                     break
                 if dealerPoints and playerPoints != 21:
                     break
                 print()
             while playerTurn:
                 playerChoice = input("Hit or stand? (hit/stand): ")
-                print()
                 if playerChoice.lower() == 'hit':
-                    print(f"YOUR CARDS:")
+                    print(f"\nYOUR CARDS:")
                     df.showHand(playerHand)
                     playerHand = df.dealPlayerCard(deck, playerHand)
                     playerPoints = df.getTotalValue(playerHand)
                     dealerPoints = df.getTotalValue(dealerHand)
-                    print()
-                elif playerPoints > 21:
-                    print()
-                    print(f"YOUR POINTS: {playerPoints}")
-                    print(f"DEALER'S POINTS: {dealerPoints}")
-                    print("You busted. Sorry, you lose.")
-                    print()
-                    money -= bet
-                    db.writeMoney(money)
-                    print(f"Money: {money}")
-                    print()
-                    dealerTurn = False
-                    playerTurn = False
-
+                    if playerPoints > 21:
+                        print(f"\nYOUR POINTS: {playerPoints}")
+                        print(f"DEALER'S POINTS: {dealerPoints}\n")
+                        print(f"You busted. Sorry, you lose.\n")
+                        money -= bet
+                        db.writeMoney(money)
+                        print(f"Money: {money}\n")
+                        dealerTurn = False
+                        playerTurn = False
                 elif playerChoice.lower() == "stand":
                     playerTurn = False
-
-            # Dealer's Turn
             while dealerTurn:
                 playerPoints = df.getTotalValue(playerHand)
                 dealerPoints = df.getTotalValue(dealerHand)
-                print(f"DEALER'S CARDS:")
+                print(f"\nDEALER'S CARDS:")
                 df.showHand(dealerHand)
-                print()
                 if dealerPoints > playerPoints:
-                    print(f"YOUR POINTS: {playerPoints}")
-                    print(f"DEALER'S POINTS: {dealerPoints}")
-                    print()
+                    print(f"\nYOUR POINTS: {playerPoints}")
+                    print(f"DEALER'S POINTS: {dealerPoints}\n")
                     print(f"Sorry. You lose.")
                     money -= Decimal(bet)
                     db.writeMoney(money)
-                    print(f"Money: {money}")
-                    print()
+                    print(f"Money: {money}\n")
                     dealerTurn = False
                 elif dealerPoints >= 17 and dealerPoints < playerPoints:
-                    print(f"YOUR POINTS: {playerPoints}")
-                    print(f"DEALER'S POINTS: {dealerPoints}")
-                    print()
+                    print(f"\nYOUR POINTS: {playerPoints}")
+                    print(f"DEALER'S POINTS: {dealerPoints}\n")
                     print("Dealer stays. You win!")
                     money += Decimal(bet)
                     money = money.quantize(Decimal("1.00"), ROUND_HALF_UP)
                     db.writeMoney(money)
-                    print(f"Money: {money}")
-                    print()
+                    print(f"Money: {money}\n")
                     dealerTurn = False
                 elif df.getTotalValue(dealerHand) < 17:
                     dealerHand = df.dealDealerCard(deck, dealerHand)
                     dealerPoints = df.getTotalValue(dealerHand)
-                    print("DEALER'S CARDS")
-                    df.showHand(dealerHand)
-                    print()
                     if dealerPoints > 21:
-                        print(f"YOUR POINTS: {playerPoints}")
-                        print(f"DEALER'S POINTS: {dealerPoints}")
-                        print()
+                        print(f"\nYOUR POINTS: {playerPoints}")
+                        print(f"DEALER'S POINTS: {dealerPoints}\n")
                         print("Dealer busted. You win.")
                         money += bet
                         money = money.quantize(Decimal("1.00"), ROUND_HALF_UP)
                         db.writeMoney(money)
-                        print(f"Money: {money}")
-                        print()
+                        print(f"Money: {money}\n")
                         dealerTurn = False
                 elif dealerPoints == playerPoints:
-                    print()
-                    print(f"YOUR POINTS: {playerPoints}")
-                    print(f"DEALER'S POINTS: {dealerPoints}")
-                    print()
+                    print(f"\nYOUR POINTS: {playerPoints}")
+                    print(f"DEALER'S POINTS: {dealerPoints}\n")
                     print("Dealer stays. It's a tie. Player gets money back.")
                     db.writeMoney(money)
-                    print(f"Money: {money}")
-                    print()
+                    print(f"Money: {money}\n")
                     dealerTurn = False
             playGame = ""
             while playGame not in ("y", "n"):
