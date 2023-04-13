@@ -1,4 +1,6 @@
 FILENAME = "money.txt"
+
+
 def readMoney():
     money = 0
     with open(FILENAME) as file:
