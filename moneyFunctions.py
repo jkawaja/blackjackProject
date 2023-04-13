@@ -1,5 +1,8 @@
 from decimal import Decimal, DecimalException, ROUND_HALF_UP
+import db
 
+# Checks to see if bet is < than current funds. See if it's between 5 and 1000.
+# Quantize to make sure result is rounded to 2 decimal points.
 def betCalculation(money):
     while True:
         try:
@@ -15,7 +18,8 @@ def betCalculation(money):
         except (ValueError, DecimalException):
             print("Invalid input. Please try again.")
 
-
+# Check to see if there is enough money to bet
+# If not, offer player to buy more chips. Exit program if they say no.
 def checkMoney(money):
     addMoney = ""
     while money < 5:
@@ -28,7 +32,6 @@ def checkMoney(money):
                 db.writeMoney(money)
                 break
             elif addMoney.lower() == "n":
-                # playGame = "n"
                 print()
                 print("You do not have enough money to bet. Game over.")
                 exit(1)

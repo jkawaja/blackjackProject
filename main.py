@@ -4,36 +4,33 @@ import deckFunctions as df
 import db
 
 
-
-
-
 def main():
         print(f"BLACKJACK!\nBlackjack payout is 3:2")
         money = Decimal(db.readMoney())
-        mf.checkMoney(money)
         playGame = "y"
         while playGame.lower() == "y":
+            # Money set up
             money = Decimal(db.readMoney())
             mf.checkMoney(money)
             money = Decimal(db.readMoney())
+            # While loop condition set up
             playerTurn = True
             dealerTurn = True
-            checkBlackJack = True
-            #Dealer / Player Hands
+            checkBlackjack = True
+            # Dealer / Player Hands
             dealerHand = []
-            # dealerHand = [["Heart", "King", 10], ["Heart", "Ace", 11]]
             playerHand = []
-            # playerHand = [["Heart", "King", 10], ["Heart", "Ace", 11]]
             print()
             print(f"Money: {money} ")
-            #Place your bet
+            # Place your bet
             bet = mf.betCalculation(money)
             print()
-            #generate deck / shuffle deck
+            # Generate deck / Shuffle deck
             deck = df.generateDeck(df.CARDS)
             deck = df.shuffleDeck(deck)
-            while checkBlackJack:
-            #set up dealerHand
+            # While loop to check for Blackjack win
+            while checkBlackjack:
+                # Set up dealerHand
                 dealerHand = df.dealDealerCard(deck, dealerHand)
                 dealerHand = df.dealDealerCard(deck, dealerHand)
                 dealerPoints = df.getTotalValue(dealerHand)
@@ -73,6 +70,8 @@ def main():
                 if dealerPoints and playerPoints != 21:
                     break
                 print()
+            # Player's Turn
+            # Player can either hit or stand
             while playerTurn:
                 playerChoice = input("Hit or stand? (hit/stand): ")
                 if playerChoice.lower() == 'hit':
@@ -82,6 +81,7 @@ def main():
                     playerPoints = df.getTotalValue(playerHand)
                     dealerPoints = df.getTotalValue(dealerHand)
                     print()
+                    # Player bust condition
                     if playerPoints > 21:
                         print(f"YOUR POINTS: {playerPoints}")
                         print(f"DEALER'S POINTS: {dealerPoints}\n")
@@ -94,11 +94,13 @@ def main():
                 elif playerChoice.lower() == "stand":
                     print()
                     playerTurn = False
+            # Dealer's turn
             while dealerTurn:
                 playerPoints = df.getTotalValue(playerHand)
                 dealerPoints = df.getTotalValue(dealerHand)
                 print(f"DEALER'S CARDS:")
                 df.showHand(dealerHand)
+                # If Dealer's points greater than player's points
                 if dealerPoints > playerPoints:
                     print(f"\nYOUR POINTS: {playerPoints}")
                     print(f"DEALER'S POINTS: {dealerPoints}\n")
@@ -107,6 +109,7 @@ def main():
                     db.writeMoney(money)
                     print(f"Money: {money}\n")
                     dealerTurn = False
+                # Dealer doesn't draw when points greater than 17
                 elif dealerPoints >= 17 and dealerPoints < playerPoints:
                     print(f"\nYOUR POINTS: {playerPoints}")
                     print(f"DEALER'S POINTS: {dealerPoints}\n")
@@ -116,10 +119,12 @@ def main():
                     db.writeMoney(money)
                     print(f"Money: {money}\n")
                     dealerTurn = False
+                # If dealer's points < 17, draw
                 elif df.getTotalValue(dealerHand) < 17:
                     dealerHand = df.dealDealerCard(deck, dealerHand)
                     print()
                     dealerPoints = df.getTotalValue(dealerHand)
+                    # If points are greater than 17, dealer busts
                     if dealerPoints > 21:
                         print(f"DEALER'S CARDS:")
                         df.showHand(dealerHand)
@@ -131,6 +136,7 @@ def main():
                         db.writeMoney(money)
                         print(f"Money: {money}\n")
                         dealerTurn = False
+                # Tie condition
                 elif dealerPoints == playerPoints:
                     print(f"\nYOUR POINTS: {playerPoints}")
                     print(f"DEALER'S POINTS: {dealerPoints}\n")
@@ -138,6 +144,7 @@ def main():
                     db.writeMoney(money)
                     print(f"Money: {money}\n")
                     dealerTurn = False
+            # Y / N to end the game
             playGame = ""
             while playGame not in ("y", "n"):
                 answer = input("Play again? (y/n): ")
