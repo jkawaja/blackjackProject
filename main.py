@@ -7,6 +7,7 @@ def betCalculation(money):
     while True:
         try:
             bet = Decimal(input("Bet Amount: "))
+            bet = bet.quantize(Decimal("1.00"), ROUND_HALF_UP)
             if bet < 5.0 and bet > 1000.00 and bet <= money:
                 print("Bet must be between $5 and $1000, and less than pot. Try again.")
             else:
@@ -46,29 +47,27 @@ def main():
 
             playerTurn = True
             dealerTurn = True
+            checkBlackJack = True
             #Dealer / Player Hands
             dealerHand = []
             playerHand = []
-
             print()
             print(f"Money: {money} ")
             #Place your bet
             bet = betCalculation(money)
             print()
-
-            #generate deck
+            #generate deck / shuffle deck
             deck = df.generateDeck(df.CARDS)
-            #shuffle deck
             deck = df.shuffleDeck(deck)
 
-            #set up dealerHand
+            # set up dealerHand
             dealerHand = df.dealDealerCard(deck, dealerHand)
             dealerHand = df.dealDealerCard(deck, dealerHand)
             dealerPoints = df.getTotalValue(dealerHand)
             print("DEALER'S SHOW CARD:")
             df.showDealerHand(dealerHand)
             print()
-            #set up playerHand
+            # set up playerHand
             print(f"YOUR CARDS:")
             playerHand = df.dealPlayerCard(deck, playerHand)
             playerHand = df.dealPlayerCard(deck, playerHand)
@@ -84,8 +83,7 @@ def main():
                     playerPoints = df.getTotalValue(playerHand)
                     dealerPoints = df.getTotalValue(dealerHand)
                     print()
-
-                if playerPoints > 21:
+                elif playerPoints > 21:
                     print()
                     print(f"YOUR POINTS: {playerPoints}")
                     print(f"DEALER'S POINTS: {dealerPoints}")
@@ -113,7 +111,7 @@ def main():
                     print(f"DEALER'S POINTS: {dealerPoints}")
                     print()
                     print(f"Sorry. You lose.")
-                    money -= bet
+                    money -= Decimal(bet)
                     db.writeMoney(money)
                     print(f"Money: {money}")
                     print()
@@ -123,7 +121,7 @@ def main():
                     print(f"DEALER'S POINTS: {dealerPoints}")
                     print()
                     print("Dealer stays. You win!")
-                    money += bet*Decimal(1.5)
+                    money += Decimal(bet)
                     money = money.quantize(Decimal("1.00"), ROUND_HALF_UP)
                     db.writeMoney(money)
                     print(f"Money: {money}")
@@ -140,7 +138,7 @@ def main():
                         print(f"DEALER'S POINTS: {dealerPoints}")
                         print()
                         print("Dealer busted. You win.")
-                        money += bet * Decimal(1.5)
+                        money += bet
                         money = money.quantize(Decimal("1.00"), ROUND_HALF_UP)
                         db.writeMoney(money)
                         print(f"Money: {money}")
@@ -162,11 +160,11 @@ def main():
                 if answer == "y":
                     playGame = "y"
                 elif answer == "n":
-                    playGame = "n"
+                     playGame = "n"
                 else:
                     print()
                     print("Please enter (y/n)")
-        print(f"Come back soon!\nBye!")
+            print(f"Come back soon!\nBye!")
 
 
 if __name__ == '__main__':
