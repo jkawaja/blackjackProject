@@ -50,7 +50,9 @@ def main():
             checkBlackJack = True
             #Dealer / Player Hands
             dealerHand = []
+            # dealerHand = [["Heart", "King", 10], ["Heart", "Ace", 11]]
             playerHand = []
+            # playerHand = [["Heart", "King", 10], ["Heart", "Ace", 11]]
             print()
             print(f"Money: {money} ")
             #Place your bet
@@ -59,20 +61,49 @@ def main():
             #generate deck / shuffle deck
             deck = df.generateDeck(df.CARDS)
             deck = df.shuffleDeck(deck)
-
-            # set up dealerHand
-            dealerHand = df.dealDealerCard(deck, dealerHand)
-            dealerHand = df.dealDealerCard(deck, dealerHand)
-            dealerPoints = df.getTotalValue(dealerHand)
-            print("DEALER'S SHOW CARD:")
-            df.showDealerHand(dealerHand)
-            print()
-            # set up playerHand
-            print(f"YOUR CARDS:")
-            playerHand = df.dealPlayerCard(deck, playerHand)
-            playerHand = df.dealPlayerCard(deck, playerHand)
-            playerPoints = df.getTotalValue(playerHand)
-            print()
+            while checkBlackJack:
+            #set up dealerHand
+                dealerHand = df.dealDealerCard(deck, dealerHand)
+                dealerHand = df.dealDealerCard(deck, dealerHand)
+                dealerPoints = df.getTotalValue(dealerHand)
+                print("DEALER'S SHOW CARD:")
+                df.showDealerHand(dealerHand)
+                print()
+                if dealerPoints == 21:
+                    print("DEALER'S SHOW CARDS:")
+                    df.showHand(dealerHand)
+                    print()
+                    print(f"Dealer Blackjack! You lose.")
+                    money -= Decimal(bet)
+                    money = money.quantize(Decimal("1.00"), ROUND_HALF_UP)
+                    db.writeMoney(money)
+                    print(f"Money: {money}")
+                    dealerTurn = False
+                    playerTurn = False
+                    print()
+                    break
+                # set up playerHand
+                print(f"YOUR CARDS:")
+                playerHand = df.dealPlayerCard(deck, playerHand)
+                playerHand = df.dealPlayerCard(deck, playerHand)
+                print()
+                playerPoints = df.getTotalValue(playerHand)
+                if playerPoints == 21:
+                    print(f"YOUR CARDS:")
+                    df.showHand(playerHand)
+                    print()
+                    print(f"Blackjack! Blackjack payout is 3:2 of bet.")
+                    money += Decimal(bet) * Decimal(1.5)
+                    money = money.quantize(Decimal("1.00"), ROUND_HALF_UP)
+                    db.writeMoney(money)
+                    print(f"Money: {money}")
+                    dealerTurn = False
+                    playerTurn = False
+                    print()
+                    break
+                if dealerPoints and playerPoints != 21:
+                    break
+                print()
             while playerTurn:
                 playerChoice = input("Hit or stand? (hit/stand): ")
                 print()
@@ -164,7 +195,7 @@ def main():
                 else:
                     print()
                     print("Please enter (y/n)")
-            print(f"Come back soon!\nBye!")
+        print(f"Come back soon!\nBye!")
 
 
 if __name__ == '__main__':
