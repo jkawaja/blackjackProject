@@ -6,7 +6,7 @@ import db
 
 def main():
         print(f"BLACKJACK!\nBlackjack payout is 3:2")
-        money = Decimal(db.readMoney())
+        print()
         playGame = "y"
         while playGame.lower() == "y":
             # Money set up
@@ -148,6 +148,7 @@ def main():
             playGame = ""
             while playGame not in ("y", "n"):
                 answer = input("Play again? (y/n): ")
+                print()
                 if answer == "y":
                     playGame = "y"
                 elif answer == "n":
