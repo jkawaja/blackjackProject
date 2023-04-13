@@ -1,46 +1,20 @@
-from decimal import Decimal, DecimalException, ROUND_HALF_UP
+from decimal import Decimal, ROUND_HALF_UP
+import moneyFunctions as mf
 import deckFunctions as df
 import db
 
 
-def betCalculation(money):
-    while True:
-        try:
-            bet = Decimal(input("Bet Amount: "))
-            bet = bet.quantize(Decimal("1.00"), ROUND_HALF_UP)
-            if bet < 5.0 and bet > 1000.00 and bet <= money:
-                print("Bet must be between $5 and $1000, and less than pot. Try again.")
-            else:
-                return bet
-        except (ValueError, DecimalException):
-            print("Invalid input. Please try again.")
 
-
-def checkMoney(money):
-    addMoney = ""
-    if money < 5:
-        print("You have $0.")
-        while addMoney != "y":
-            addMoney = input("Would you like to buy more chips? (100) (y/n): ")
-            if addMoney.lower() == "y":
-                money += Decimal(100.0)
-                money = money.quantize(Decimal("1.00"), ROUND_HALF_UP)
-                db.writeMoney(money)
-            elif addMoney.lower() == "n":
-                playGame = "n"
-                print()
-                print("You do not have enough money to bet. Game over.")
-                return playGame
 
 
 def main():
         print(f"BLACKJACK!\nBlackjack payout is 3:2")
         money = Decimal(db.readMoney())
-        checkMoney(money)
+        mf.checkMoney(money)
         playGame = "y"
         while playGame.lower() == "y":
             money = Decimal(db.readMoney())
-            checkMoney(money)
+            mf.checkMoney(money)
             money = Decimal(db.readMoney())
             playerTurn = True
             dealerTurn = True
@@ -53,7 +27,7 @@ def main():
             print()
             print(f"Money: {money} ")
             #Place your bet
-            bet = betCalculation(money)
+            bet = mf.betCalculation(money)
             print()
             #generate deck / shuffle deck
             deck = df.generateDeck(df.CARDS)
@@ -107,8 +81,9 @@ def main():
                     playerHand = df.dealPlayerCard(deck, playerHand)
                     playerPoints = df.getTotalValue(playerHand)
                     dealerPoints = df.getTotalValue(dealerHand)
+                    print()
                     if playerPoints > 21:
-                        print(f"\nYOUR POINTS: {playerPoints}")
+                        print(f"YOUR POINTS: {playerPoints}")
                         print(f"DEALER'S POINTS: {dealerPoints}\n")
                         print(f"You busted. Sorry, you lose.\n")
                         money -= bet
@@ -117,11 +92,12 @@ def main():
                         dealerTurn = False
                         playerTurn = False
                 elif playerChoice.lower() == "stand":
+                    print()
                     playerTurn = False
             while dealerTurn:
                 playerPoints = df.getTotalValue(playerHand)
                 dealerPoints = df.getTotalValue(dealerHand)
-                print(f"\nDEALER'S CARDS:")
+                print(f"DEALER'S CARDS:")
                 df.showHand(dealerHand)
                 if dealerPoints > playerPoints:
                     print(f"\nYOUR POINTS: {playerPoints}")
@@ -142,8 +118,11 @@ def main():
                     dealerTurn = False
                 elif df.getTotalValue(dealerHand) < 17:
                     dealerHand = df.dealDealerCard(deck, dealerHand)
+                    print()
                     dealerPoints = df.getTotalValue(dealerHand)
                     if dealerPoints > 21:
+                        print(f"DEALER'S CARDS:")
+                        df.showHand(dealerHand)
                         print(f"\nYOUR POINTS: {playerPoints}")
                         print(f"DEALER'S POINTS: {dealerPoints}\n")
                         print("Dealer busted. You win.")
@@ -165,10 +144,9 @@ def main():
                 if answer == "y":
                     playGame = "y"
                 elif answer == "n":
-                     playGame = "n"
+                    playGame = "n"
                 else:
-                    print()
-                    print("Please enter (y/n)")
+                    print(f"\nInvalid input. Please enter 'y' or 'n'.")
         print(f"Come back soon!\nBye!")
 
 
