@@ -48,14 +48,17 @@ def dealPlayerCard(deck, hand):
         if checkTotal > 21 and deck[0][1] == "Ace":
             deck[0][2] = 1
         elif checkTotal <= 21 and deck[0][1] == "Ace":
-            try:
-                aceChoice = int(input("You have drawn an Ace, would you like it to be 1 or 11? (enter 1 or 11): "))
-                if aceChoice == 1:
-                    deck[0][2] = 1
-                elif aceChoice == 11:
-                    deck[0][2] = 11
-            except ValueError:
-                print("Invalid input. Please try again.")
+            while True:
+                try:
+                    aceChoice = int(input("You have drawn an Ace, would you like it to be 1 or 11? (enter 1 or 11): "))
+                    if aceChoice == 1:
+                        deck[0][2] = 1
+                        break
+                    elif aceChoice == 11:
+                        deck[0][2] = 11
+                        break
+                except ValueError:
+                    print("Invalid input. Please try again.")
     hand.append(deck[0])
     deck.pop(0)
     return hand
