@@ -168,40 +168,6 @@ def main():
                     print("Please enter (y/n)")
         print(f"Come back soon!\nBye!")
 
+
 if __name__ == '__main__':
     main()
-
-
-
-
-# def main():
-#     deck = [["Spade", "10", 10], ["Heart", "Ace", 11]]
-#     # print(deck[0][2], deck[0][1])
-#     playerHand = [] # , ["Diamond", "Ace", 11]
-#     # showHand(playerHand)
-#     # total = getTotalValue(playerHand)
-#     # print("player hand", total)
-#     # Draw an Ace
-#     playerHand = dealPlayerCard(deck, playerHand)
-#     playerHand = dealPlayerCard(deck, playerHand)
-#     # showHand(playerHand)
-#     # total = getTotalValue(playerHand)
-#     # print("player hand", total)
-#
-#     # print(deck)
-#
-#
-# if __name__ == '__main__':
-#     main()
-
-# if money < 5:
-#     while addMoney != "y":
-#         addMoney = input("Would you like to buy more chips? (100) (y/n): ")
-#         if addMoney.lower() == "y":
-#             money += Decimal(100.0)
-#             db.writeMoney(money)
-#         elif addMoney.lower() == "n":
-#             playGame = "n"
-#             print()
-#             print("You do not have enough money to bet. Game over.")
-#             return playGame
