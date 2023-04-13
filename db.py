@@ -9,7 +9,7 @@ def readMoney():
                 line = line.replace("\n", "")
                 money = line
     except FileNotFoundError:
-        print(f"Could not find the file named 'money.txt'. Starting from Scratch\n")
+        print("Could not find the file named 'money.txt'.\nClosing Program.")
         sys.exit(1)
     except Exception as e:
         print("Unknown exception. Closing program.")
@@ -23,7 +23,7 @@ def writeMoney(money):
         with open("money.txt", "w") as file:
             file.write(f"{money}")
     except FileNotFoundError:
-        print(f"Could not find the file named 'money.txt'. Starting from Scratch\n")
+        print("Could not find the file named 'money.txt'.\nClosing Program.")
         sys.exit(1)
     except Exception as e:
         print("Unknown exception, closing program.")
