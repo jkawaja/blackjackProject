@@ -30,7 +30,7 @@ def checkMoney(money):
                 money += Decimal(100.0)
                 money = money.quantize(Decimal("1.00"), ROUND_HALF_UP)
                 db.writeMoney(money)
-                break
+                return money
             elif addMoney.lower() == "n":
                 print()
                 print("You do not have enough money to bet. Game over.")

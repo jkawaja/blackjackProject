@@ -11,8 +11,7 @@ def main():
         while playGame.lower() == "y":
             # Money set up
             money = Decimal(db.readMoney())
-            mf.checkMoney(money)
-            money = Decimal(db.readMoney())
+            money = mf.checkMoney(money)
             # While loop condition set up
             playerTurn = True
             dealerTurn = True
